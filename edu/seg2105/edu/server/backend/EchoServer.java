@@ -72,6 +72,27 @@ public class EchoServer extends AbstractServer
       ("Server has stopped listening for connections.");
   }
   
+  /**
+     * Implemented for Exercise 1, Server Side c)
+	 * A method to announce when a client connects.
+	 * @param client the connection connected to the client.
+	 */
+  public void clientConnected(ConnectionToClient client) {
+	  System.out.println("Client " + 
+			  client.getInetAddress().toString() + " connected. Yay :)");
+  }
+
+	/**
+	 * Implemented for Exercise 1, Server Side c)
+	 * A method to announce when a client disconnects.
+	 * @param client the connection with the client.
+	 */
+  synchronized public void clientDisconnected(
+		  ConnectionToClient client) {
+	  System.out.println("Client " + 
+			  client.getInetAddress().toString() + " disconnected. Aw :(");
+	}
+  
   
   //Class methods ***************************************************
   

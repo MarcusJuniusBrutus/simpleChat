@@ -86,7 +86,7 @@ public class ChatClient extends AbstractClient
    * Method to respond to the closing of a connection to server.
    */
   public void connectionClosed() {
-	  clientUI.display("The server has shut down.");
+	  clientUI.display("The connection to the server has been closed.");
   }
   
   /**

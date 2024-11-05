@@ -73,27 +73,81 @@ public class ClientConsole implements ChatIF
   //Instance methods ************************************************
   
   /**
-   * This method waits for input from the console.  Once it is 
-   * received, it sends it to the client's message handler.
+   * Modified for Exercise 2, Client Side a) to add support for some commands.
+   * This method waits for input from the console. 
+   * If the input is a command, does an appropriate action.
+   * If the input is not a command, sends it to the client's message handler.
    */
-  public void accept() 
-  {
-    try
-    {
+  public void accept() {
+	  try {
 
-      String message;
+		  String message;
 
-      while (true) 
-      {
-        message = fromConsole.nextLine();
-        client.handleMessageFromClientUI(message);
-      }
-    } 
-    catch (Exception ex) 
-    {
-      System.out.println
-        ("Unexpected error while reading from console!");
-    }
+		  while (true) {
+			  message = fromConsole.nextLine();
+			  
+			  if (!message.equals("") && message.charAt(0) == '#') {
+				  //message is some command
+				  String[] message_split_up = message.split(" ", 2);
+				  
+				  if (message_split_up[0].equals("#quit")) {
+					  client.quit();
+				  } 
+				  else if (message_split_up[0].equals("#logoff")) {
+					  if (client.isConnected()) {
+						  client.closeConnection();
+					  } else { //!client.isConnected()
+						  System.out.println("There is no connection to server to log off from.");
+					  }
+				  } 
+				  else if (message_split_up[0].equals("#sethost")) {
+					  if (!client.isConnected()) {
+						  client.setHost(message_split_up[1]);
+						  System.out.println("Host name set to: " + message_split_up[1]);
+					  } else { //client.isConnected()
+						  System.out.println("Can only set host name if disconnected. "
+						  		+ "Please disconnect first.");
+					  }
+				  } 
+				  else if (message_split_up[0].equals("#setport")) {
+					  if (!client.isConnected()) {
+						  client.setPort(Integer.parseInt(message_split_up[1]));
+						  System.out.println("Port number set to: " + message_split_up[1]);
+					  } else { //client.isConnected()
+						  System.out.println("Can only set port number if disconnected. "
+							  		+ "Please disconnect first.");
+					  }
+				  } 
+				  else if (message_split_up[0].equals("#login")) {
+					  if (client.isConnected()) {
+						  System.out.println("Already connected to server.");
+					  } else { //!client.isConnected()
+						  client.openConnection();
+						  System.out.println("Have now connected to server.");
+					  }
+				  }
+				  else if (message_split_up[0].equals("#gethost")) {
+					  System.out.println("Current host name: "
+							  + client.getHost());
+				  }
+				  else if (message_split_up[0].equals("#getport")) {
+					  System.out.println("Current port number: "
+							  + client.getPort());
+				  }
+				  else {
+					  //was not one of the preset commands
+					  System.out.println("That was not a valid command.");
+				  }
+				  
+			  } else {
+				  //message is actually a message to be sent to the client
+				  client.handleMessageFromClientUI(message);
+			  }
+		  }
+		  
+	  } catch (Exception ex) {
+		  System.out.println("Unexpected error while reading from console!");
+	  }
   }
 
   /**

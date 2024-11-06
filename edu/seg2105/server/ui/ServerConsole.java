@@ -77,13 +77,49 @@ public class ServerConsole implements ChatIF {
 			String message;
 			
 			while (true) {
-				message = fromConsole.nextLine();
+				message = fromConsole.nextLine().trim();
 				
 				if (!message.equals("") && message.charAt(0) == '#') {
 					//message is some command
 					String[] message_split_up = message.split(" ", 2);
 					
-					//TODO: implement the commands
+					if (message_split_up[0].equals("#quit")) {
+						server.close();
+						System.exit(0);
+					} else if (message_split_up[0].equals("#stop")) {
+						if (server.isListening()) {
+							server.stopListening();
+						} else { //!server.isListening()
+							display("Server is already not listening for new clients.");
+						}
+					} else if (message_split_up[0].equals("#close")) {
+						server.close();
+						display("The server has been closed.");
+					} else if (message_split_up[0].equals("#setport")) {
+						if (server.isListening()) {
+							display("Cannot set port when server is not closed.");
+						} else { //!server.isListening()
+							try {
+								int newPort = Integer.parseInt(message_split_up[1]);
+								server.setPort(newPort);
+								display("Port number set to: " + message_split_up[1]);
+							} catch (NumberFormatException ex) {
+								display("Port number must be an integer.");
+							}
+						}
+					} else if (message_split_up[0].equals("#start")) {
+						if (server.isListening()) {
+							display("Server is already running.");
+						} else { //!server.isListening()
+							server.listen();
+							display("Server is now listening for new clients.");
+						}
+					} else if (message_split_up[0].equals("#getport")) {
+						  display("Current port number: " + server.getPort());
+					} else {
+						//was not one of the preset commands
+						display("That was not a valid command.");
+					}
 					
 				} else {
 					//message is some message to send to the server to be broadcasted to all users

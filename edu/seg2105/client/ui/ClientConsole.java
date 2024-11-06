@@ -84,7 +84,7 @@ public class ClientConsole implements ChatIF
 		  String message;
 
 		  while (true) {
-			  message = fromConsole.nextLine();
+			  message = fromConsole.nextLine().trim();
 			  
 			  if (!message.equals("") && message.charAt(0) == '#') {
 				  //message is some command
@@ -97,7 +97,7 @@ public class ClientConsole implements ChatIF
 					  if (client.isConnected()) {
 						  client.closeConnection();
 					  } else { //!client.isConnected()
-						  display("There is no connection to server to log off from.");
+						  display("Client is already not connected to a server.");
 					  }
 				  } 
 				  else if (message_split_up[0].equals("#sethost")) {
@@ -111,8 +111,13 @@ public class ClientConsole implements ChatIF
 				  } 
 				  else if (message_split_up[0].equals("#setport")) {
 					  if (!client.isConnected()) {
-						  client.setPort(Integer.parseInt(message_split_up[1]));
-						  display("Port number set to: " + message_split_up[1]);
+						  try {
+							  int newPort = Integer.parseInt(message_split_up[1]);
+							  client.setPort(newPort);
+							  display("Port number set to: " + message_split_up[1]); 
+						  } catch (NumberFormatException ex) {
+							  display("Port number must be an integer.");
+						  }
 					  } else { //client.isConnected()
 						  display("Can only set port number if disconnected. "
 							  		+ "Please disconnect first.");

@@ -167,7 +167,7 @@ public class ClientConsole implements ChatIF
   /**
    * This method is responsible for the creation of the Client UI.
    *
-   * @param args[0] The host to connect to.
+   * @param args what the user typed in.
    */
   public static void main(String[] args) 
   {

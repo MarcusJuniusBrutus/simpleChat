@@ -84,9 +84,10 @@ public class EchoServer extends AbstractServer
 	 * A method to announce when a client connects.
 	 * @param client the connection connected to the client.
 	 */
-  public void clientConnected(ConnectionToClient client) {
+  @Override
+  protected void clientConnected(ConnectionToClient client) {
 	  System.out.println("Client " + 
-			  client.getInetAddress().toString() + " connected. Yay :)");
+			  client.getInetAddress().toString() + " connected. Welcome, we are happy to have you!");
   }
 
 	/**
@@ -94,11 +95,23 @@ public class EchoServer extends AbstractServer
 	 * A method to announce when a client disconnects.
 	 * @param client the connection with the client.
 	 */
-  synchronized public void clientDisconnected(
+  @Override
+  synchronized protected void clientDisconnected(
 		  ConnectionToClient client) {
-	  System.out.println("Client " + 
-			  client.getInetAddress().toString() + " disconnected. Aw :(");
+	  System.out.println("A client has disconnected. We will miss them!");
 	}
+  
+  /**
+	 * Implemented for Exercise 1, Server Side c)
+	 * A method to announce when a client has some exception occur.
+	 * @param client the connection with the client.
+	 * @param exception the exception the client threw
+	 */
+  @Override
+  synchronized protected void clientException(
+			ConnectionToClient client, Throwable exception) {
+	  System.out.println("A client has disconnected. We will miss them!");
+  }
   
   
   //Class methods ***************************************************

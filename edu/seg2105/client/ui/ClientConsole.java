@@ -97,46 +97,46 @@ public class ClientConsole implements ChatIF
 					  if (client.isConnected()) {
 						  client.closeConnection();
 					  } else { //!client.isConnected()
-						  System.out.println("There is no connection to server to log off from.");
+						  display("There is no connection to server to log off from.");
 					  }
 				  } 
 				  else if (message_split_up[0].equals("#sethost")) {
 					  if (!client.isConnected()) {
 						  client.setHost(message_split_up[1]);
-						  System.out.println("Host name set to: " + message_split_up[1]);
+						  display("Host name set to: " + message_split_up[1]);
 					  } else { //client.isConnected()
-						  System.out.println("Can only set host name if disconnected. "
+						  display("Can only set host name if disconnected. "
 						  		+ "Please disconnect first.");
 					  }
 				  } 
 				  else if (message_split_up[0].equals("#setport")) {
 					  if (!client.isConnected()) {
 						  client.setPort(Integer.parseInt(message_split_up[1]));
-						  System.out.println("Port number set to: " + message_split_up[1]);
+						  display("Port number set to: " + message_split_up[1]);
 					  } else { //client.isConnected()
-						  System.out.println("Can only set port number if disconnected. "
+						  display("Can only set port number if disconnected. "
 							  		+ "Please disconnect first.");
 					  }
 				  } 
 				  else if (message_split_up[0].equals("#login")) {
 					  if (client.isConnected()) {
-						  System.out.println("Already connected to server.");
+						  display("Already connected to server.");
 					  } else { //!client.isConnected()
 						  client.openConnection();
-						  System.out.println("Have now connected to server.");
+						  display("Have now connected to server.");
 					  }
 				  }
 				  else if (message_split_up[0].equals("#gethost")) {
-					  System.out.println("Current host name: "
+					  display("Current host name: "
 							  + client.getHost());
 				  }
 				  else if (message_split_up[0].equals("#getport")) {
-					  System.out.println("Current port number: "
+					  display("Current port number: "
 							  + client.getPort());
 				  }
 				  else {
 					  //was not one of the preset commands
-					  System.out.println("That was not a valid command.");
+					  display("That was not a valid command.");
 				  }
 				  
 			  } else {
@@ -146,7 +146,7 @@ public class ClientConsole implements ChatIF
 		  }
 		  
 	  } catch (Exception ex) {
-		  System.out.println("Unexpected error while reading from console!");
+		  display("Unexpected error while reading from console!");
 	  }
   }
 

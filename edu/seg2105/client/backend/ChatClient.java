@@ -85,7 +85,8 @@ public class ChatClient extends AbstractClient
    * Implemented for Exercise 1, Client Side a)
    * Method to respond to the closing of a connection to server.
    */
-  public void connectionClosed() {
+  @Override
+  protected void connectionClosed() {
 	  clientUI.display("The connection to the server has been closed.");
   }
   
@@ -93,8 +94,9 @@ public class ChatClient extends AbstractClient
    * Implemented for Exercise 1, Client Side a)
    * Method to respond to some exception the server might have thrown.
    */
-  public void connectionException() {
-	  clientUI.display("The server has shut down.");
+  @Override
+  protected void connectionException(Exception ex) {
+	  clientUI.display("The server has unexpectedly shut down.");
   }
   
   /**

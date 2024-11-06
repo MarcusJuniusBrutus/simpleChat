@@ -30,7 +30,7 @@ public class ClientConsole implements ChatIF
   //Instance variables **********************************************
   
   /**
-   * The instance of the client that created this ConsoleChat.
+   * The instance of the client that created this ClientConsole.
    */
   ChatClient client;
   

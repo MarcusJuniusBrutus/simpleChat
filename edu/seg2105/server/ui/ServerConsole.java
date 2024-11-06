@@ -7,16 +7,15 @@ import java.io.*;
 import java.util.Scanner;
 
 public class ServerConsole implements ChatIF {
-
-	/**
-	   * This method overrides the method in the ChatIF interface.  It
-	   * displays a message onto the screen.
-	   *
-	   * @param message The string to be displayed.
+	
+	//Class variables *************************************************
+	  
+	  /**
+	   * The default port to listen on.
 	   */
-	public void display(String message) {
-		System.out.println("> " + message);
-	}
+	  final public static int DEFAULT_PORT = 5555;
+	  
+	//Instance variables **********************************************
 	
 	/**
 	* Scanner to read from the console
@@ -24,9 +23,28 @@ public class ServerConsole implements ChatIF {
 	Scanner fromConsole;
 	
 	/**
-	* The instance of the server that created this ConsoleChat.
+	* The instance of the server that created this ServerConsole.
 	*/
 	EchoServer server;
+	
+	//Constructors ****************************************************
+
+	  /**
+	   * Constructs an instance of the ServerConsole UI.
+	   *
+	   * @param port The port to listen on.
+	   */
+	public ServerConsole (int port) {
+		try {
+			server = new EchoServer(port, this);
+		} catch (IOException ex) {
+			System.out.println("Error: Cannot start listening. Terminating server.");
+			System.exit(1);
+		}
+		
+		// Create scanner object to read from console
+	    fromConsole = new Scanner(System.in); 
+	}
 	
 	/**
 	* This method is responsible for the creation of the Server UI.
@@ -34,73 +52,59 @@ public class ServerConsole implements ChatIF {
 	* @param args what the end-user of the server typed in.
 	*/
 	public static void main (String[] args) {
+		int port = 0;
+		
 		try {
-			  String message;
+			port = Integer.parseInt(args[0]);
+		} catch (ArrayIndexOutOfBoundsException ex) {
+			port = DEFAULT_PORT;
+		}
+		
+		ServerConsole chat = new ServerConsole(port);
+		chat.accept();
+	}
+	
+	//Instance methods ************************************************
+	  
+	/**
+	* This method waits for input from the console. 
+	* If the input is a command, does an appropriate action.
+	* If the input is not a command, sends it to the server's message handler.
+	*/
+	public void accept() {
+		try {
+			
+			String message;
+			
+			while (true) {
+				message = fromConsole.nextLine();
+				
+				if (!message.equals("") && message.charAt(0) == '#') {
+					//message is some command
+					String[] message_split_up = message.split(" ", 2);
+					
+					//TODO: implement the commands
+					
+				} else {
+					//message is some message to send to the server to be broadcasted to all users
+					message += "SERVER MSG>";
+					display(message);
+					server.sendToAllClients(message);
+				}
+			}
+			
+		} catch (Exception ex) {
+			display("Unexpected error while reading from console!");
+		}
+	}
 
-			  while (true) {
-				  message = fromConsole.nextLine();
-				  
-				  if (!message.equals("") && message.charAt(0) == '#') {
-					  //message is some command
-					  String[] message_split_up = message.split(" ", 2);
-					  
-					  if (message_split_up[0].equals("#quit")) {
-						  client.quit();
-					  } 
-					  else if (message_split_up[0].equals("#logoff")) {
-						  if (client.isConnected()) {
-							  client.closeConnection();
-						  } else { //!client.isConnected()
-							  System.out.println("There is no connection to server to log off from.");
-						  }
-					  } 
-					  else if (message_split_up[0].equals("#sethost")) {
-						  if (!client.isConnected()) {
-							  client.setHost(message_split_up[1]);
-							  System.out.println("Host name set to: " + message_split_up[1]);
-						  } else { //client.isConnected()
-							  System.out.println("Can only set host name if disconnected. "
-							  		+ "Please disconnect first.");
-						  }
-					  } 
-					  else if (message_split_up[0].equals("#setport")) {
-						  if (!client.isConnected()) {
-							  client.setPort(Integer.parseInt(message_split_up[1]));
-							  System.out.println("Port number set to: " + message_split_up[1]);
-						  } else { //client.isConnected()
-							  System.out.println("Can only set port number if disconnected. "
-								  		+ "Please disconnect first.");
-						  }
-					  } 
-					  else if (message_split_up[0].equals("#login")) {
-						  if (client.isConnected()) {
-							  System.out.println("Already connected to server.");
-						  } else { //!client.isConnected()
-							  client.openConnection();
-							  System.out.println("Have now connected to server.");
-						  }
-					  }
-					  else if (message_split_up[0].equals("#gethost")) {
-						  System.out.println("Current host name: "
-								  + client.getHost());
-					  }
-					  else if (message_split_up[0].equals("#getport")) {
-						  System.out.println("Current port number: "
-								  + client.getPort());
-					  }
-					  else {
-						  //was not one of the preset commands
-						  System.out.println("That was not a valid command.");
-					  }
-					  
-				  } else {
-					  //message is actually a message to be sent to the client
-					  client.handleMessageFromClientUI(message);
-				  }
-			  }
-			  
-		  } catch (Exception ex) {
-			  System.out.println("Unexpected error while reading from console!");
-		  }
+	/**
+	* This method overrides the method in the ChatIF interface.  It
+	* displays a message onto the screen.
+	*
+	* @param message The string to be displayed.
+	*/
+	public void display(String message) {
+		System.out.println("> " + message);
 	}
 }

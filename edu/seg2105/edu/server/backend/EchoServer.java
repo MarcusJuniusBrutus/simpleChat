@@ -4,6 +4,9 @@ package edu.seg2105.edu.server.backend;
 // license found at www.lloseng.com 
 
 
+import java.io.IOException;
+
+import edu.seg2105.client.common.ChatIF;
 import ocsf.server.*;
 
 /**
@@ -24,6 +27,12 @@ public class EchoServer extends AbstractServer
    */
   final public static int DEFAULT_PORT = 5555;
   
+  /**
+  * The interface type variable.  It allows the implementation of 
+  * the display method in the server.
+  */
+  ChatIF serverUI;
+  
   //Constructors ****************************************************
   
   /**
@@ -31,9 +40,11 @@ public class EchoServer extends AbstractServer
    *
    * @param port The port number to connect on.
    */
-  public EchoServer(int port) 
+  public EchoServer(int port, ChatIF serverUI) throws IOException
   {
     super(port);
+    this.serverUI = serverUI;
+    listen();
   }
 
   
@@ -77,9 +88,10 @@ public class EchoServer extends AbstractServer
 	 * A method to announce when a client connects.
 	 * @param client the connection connected to the client.
 	 */
-  public void clientConnected(ConnectionToClient client) {
+  @Override
+  protected void clientConnected(ConnectionToClient client) {
 	  System.out.println("Client " + 
-			  client.getInetAddress().toString() + " connected. Yay :)");
+			  client.getInetAddress().toString() + " connected. Welcome, we are happy to have you!");
   }
 
 	/**
@@ -87,45 +99,22 @@ public class EchoServer extends AbstractServer
 	 * A method to announce when a client disconnects.
 	 * @param client the connection with the client.
 	 */
-  synchronized public void clientDisconnected(
+  @Override
+  synchronized protected void clientDisconnected(
 		  ConnectionToClient client) {
-	  System.out.println("Client " + 
-			  client.getInetAddress().toString() + " disconnected. Aw :(");
+	  System.out.println("A client has disconnected. We will miss them!");
 	}
   
-  
-  //Class methods ***************************************************
-  
   /**
-   * This method is responsible for the creation of 
-   * the server instance (there is no UI in this phase).
-   *
-   * @param args[0] The port number to listen on.  Defaults to 5555 
-   *          if no argument is entered.
-   */
-  public static void main(String[] args) 
-  {
-    int port = 0; //Port to listen on
-
-    try
-    {
-      port = Integer.parseInt(args[0]); //Get port from command line
-    }
-    catch(Throwable t)
-    {
-      port = DEFAULT_PORT; //Set port to 5555
-    }
-	
-    EchoServer sv = new EchoServer(port);
-    
-    try 
-    {
-      sv.listen(); //Start listening for connections
-    } 
-    catch (Exception ex) 
-    {
-      System.out.println("ERROR - Could not listen for clients!");
-    }
+	 * Implemented for Exercise 1, Server Side c)
+	 * A method to announce when a client has some exception occur.
+	 * @param client the connection with the client.
+	 * @param exception the exception the client threw
+	 */
+  @Override
+  synchronized protected void clientException(
+			ConnectionToClient client, Throwable exception) {
+	  System.out.println("A client has disconnected. We will miss them!");
   }
 }
 //End of EchoServer class

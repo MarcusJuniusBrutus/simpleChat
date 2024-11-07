@@ -64,8 +64,6 @@ public class ChatClient extends AbstractClient
   public void handleMessageFromServer(Object msg) 
   {
     clientUI.display(msg.toString());
-    
-    
   }
 
   /**
@@ -103,6 +101,16 @@ public class ChatClient extends AbstractClient
   @Override
   protected void connectionException(Exception ex) {
 	  clientUI.display("The server has unexpectedly shut down.");
+  }
+  
+  /**
+	 * Overrides the parent method for when a connection to some server has been established.
+	 */
+  @Override
+  protected void connectionEstablished() {
+	  try {
+		sendToServer("#login " + loginID);
+	} catch (IOException e) {}
   }
   
   /**

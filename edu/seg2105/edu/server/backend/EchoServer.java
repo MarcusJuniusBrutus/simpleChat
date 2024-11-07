@@ -56,11 +56,35 @@ public class EchoServer extends AbstractServer
    * @param msg The message received from the client.
    * @param client The connection from which the message originated.
    */
-  public void handleMessageFromClient
-    (Object msg, ConnectionToClient client)
+  public void handleMessageFromClient (Object msg, ConnectionToClient client)
   {
-    System.out.println("Message received: " + msg + " from " + client);
-    this.sendToAllClients(msg);
+	  //client.getInfo("loginID") will hold:
+	  //the loginID if the first command has already been received
+	  //null if the first command has not yet been received
+	  
+	  String message = msg.toString();
+	  String[] message_split_up = message.split(" ", 2);
+	  
+	  if ( (client.getInfo("loginID") == null) && (message_split_up[0].equals("#login")) ) {
+		String loginID = message_split_up[1];
+		client.setInfo("loginID", loginID);
+	  } else {
+		  //client.getInfo("loginID") != null || message_split_up[0] != "#login"
+		  
+		  if (message_split_up[0].equals("#login")) {
+			  //client.getInfo("loginID") != null && message_split_up[0] == "#login"
+			  //a loginID is already in the system (so the first command has already been received),
+			  //but now you are again trying to use the #login command
+			  try {
+				client.sendToClient("You cannot use the command #login since it has already been used before.");
+				client.close();
+			  } catch (IOException e) {}
+		  } else { //message_split_up != "#login"
+			  System.out.println("Message received: " + message + " from Client <" 
+				  + client.getInfo("loginID") + ">");
+			  this.sendToAllClients("<" + client.getInfo("loginID") + "> " + message);
+		  }
+	  }
   }
     
   /**

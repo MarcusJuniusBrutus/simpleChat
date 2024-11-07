@@ -56,11 +56,25 @@ public class EchoServer extends AbstractServer
    * @param msg The message received from the client.
    * @param client The connection from which the message originated.
    */
-  public void handleMessageFromClient
-    (Object msg, ConnectionToClient client)
+  public void handleMessageFromClient (Object msg, ConnectionToClient client)
   {
-    System.out.println("Message received: " + msg + " from " + client);
-    this.sendToAllClients(msg);
+	  //client.getInfo("loginID") will hold:
+	  //the loginID if the first command has already been received
+	  //null if the first command has not yet been received
+	  
+	  String message = msg.toString();
+	  String[] message_split_up = message.split(" ", 2);
+	  
+	  if ( (client.getInfo("loginID") == null) && (message_split_up[0].equals("#login")) ) {
+		String loginID = message_split_up[1];
+		client.setInfo("loginID", loginID);
+	  } else {
+		  //client.getInfo("loginID") != null || message_split_up[0] != "#login"
+		  //so this message is not the first command received after a client connects or
+		  //the message is not a command
+		  System.out.println("Message received: " + message + " from " + client);
+		  this.sendToAllClients(msg);
+	  }
   }
     
   /**

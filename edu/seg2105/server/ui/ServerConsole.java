@@ -83,16 +83,16 @@ public class ServerConsole implements ChatIF {
 					//message is some command
 					String[] message_split_up = message.split(" ", 2);
 					
-					if (message_split_up[0].equals("#quit")) {
+					if (message.equals("#quit")) {
 						server.close();
 						System.exit(0);
-					} else if (message_split_up[0].equals("#stop")) {
+					} else if (message.equals("#stop")) {
 						if (server.isListening()) {
 							server.stopListening();
 						} else { //!server.isListening()
 							display("Server is already not listening for new clients.");
 						}
-					} else if (message_split_up[0].equals("#close")) {
+					} else if (message.equals("#close")) {
 						server.close();
 						display("The server has been closed.");
 					} else if (message_split_up[0].equals("#setport")) {
@@ -107,14 +107,14 @@ public class ServerConsole implements ChatIF {
 								display("Port number must be an integer.");
 							}
 						}
-					} else if (message_split_up[0].equals("#start")) {
+					} else if (message.equals("#start")) {
 						if (server.isListening()) {
 							display("Server is already running.");
 						} else { //!server.isListening()
 							server.listen();
 							display("Server is now listening for new clients.");
 						}
-					} else if (message_split_up[0].equals("#getport")) {
+					} else if (message.equals("#getport")) {
 						  display("Current port number: " + server.getPort());
 					} else {
 						//was not one of the preset commands
@@ -123,7 +123,7 @@ public class ServerConsole implements ChatIF {
 					
 				} else {
 					//message is some message to send to the server to be broadcasted to all users
-					message += "SERVER MSG>";
+					message += " <SERVER MSG>";
 					display(message);
 					server.sendToAllClients(message);
 				}

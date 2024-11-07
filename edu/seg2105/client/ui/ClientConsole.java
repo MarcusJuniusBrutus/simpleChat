@@ -90,10 +90,10 @@ public class ClientConsole implements ChatIF
 				  //message is some command
 				  String[] message_split_up = message.split(" ", 2);
 				  
-				  if (message_split_up[0].equals("#quit")) {
+				  if (message.equals("#quit")) {
 					  client.quit();
 				  } 
-				  else if (message_split_up[0].equals("#logoff")) {
+				  else if (message.equals("#logoff")) {
 					  if (client.isConnected()) {
 						  client.closeConnection();
 					  } else { //!client.isConnected()
@@ -123,7 +123,7 @@ public class ClientConsole implements ChatIF
 							  		+ "Please disconnect first.");
 					  }
 				  } 
-				  else if (message_split_up[0].equals("#login")) {
+				  else if (message.equals("#login")) {
 					  if (client.isConnected()) {
 						  display("Already connected to server.");
 					  } else { //!client.isConnected()
@@ -131,11 +131,11 @@ public class ClientConsole implements ChatIF
 						  display("Have now connected to server.");
 					  }
 				  }
-				  else if (message_split_up[0].equals("#gethost")) {
+				  else if (message.equals("#gethost")) {
 					  display("Current host name: "
 							  + client.getHost());
 				  }
-				  else if (message_split_up[0].equals("#getport")) {
+				  else if (message.equals("#getport")) {
 					  display("Current port number: "
 							  + client.getPort());
 				  }

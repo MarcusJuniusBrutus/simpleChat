@@ -70,10 +70,20 @@ public class EchoServer extends AbstractServer
 		client.setInfo("loginID", loginID);
 	  } else {
 		  //client.getInfo("loginID") != null || message_split_up[0] != "#login"
-		  //so this message is not the first command received after a client connects or
-		  //the message is not a command
-		  System.out.println("Message received: " + message + " from " + client);
-		  this.sendToAllClients(msg);
+		  
+		  if (message_split_up[0].equals("#login")) {
+			  //client.getInfo("loginID") != null && message_split_up[0] == "#login"
+			  //a loginID is already in the system (so the first command has already been received),
+			  //but now you are again trying to use the #login command
+			  try {
+				client.sendToClient("You cannot use the command #login since it has already been used before.");
+				client.close();
+			  } catch (IOException e) {}
+		  } else { //message_split_up != "#login"
+			  System.out.println("Message received: " + message + " from Client <" 
+				  + client.getInfo("loginID") + ">");
+			  this.sendToAllClients("<" + client.getInfo("loginID") + "> " + message);
+		  }
 	  }
   }
     

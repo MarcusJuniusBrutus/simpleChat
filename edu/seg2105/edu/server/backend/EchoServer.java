@@ -106,7 +106,8 @@ public class EchoServer extends AbstractServer
 	 */
   @Override
   protected void clientConnected(ConnectionToClient client) {
-	  serverUI.display("A new client has connected to the server.");
+	  serverUI.display("<" + client.getInfo("loginID") 
+	  		+ "> has connected.");
   }
 
 	/**
@@ -117,7 +118,8 @@ public class EchoServer extends AbstractServer
   @Override
   synchronized protected void clientDisconnected(
 		  ConnectionToClient client) {
-	  serverUI.display("A client has disconnected. We will miss them!");
+	  serverUI.display("<" + client.getInfo("loginID") 
+		+ "> has disconnected.");
 	}
   
   /**

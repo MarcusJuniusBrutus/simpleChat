@@ -94,7 +94,6 @@ public class ServerConsole implements ChatIF {
 						}
 					} else if (message.equals("#close")) {
 						server.close();
-						display("The server has been closed.");
 					} else if (message_split_up[0].equals("#setport")) {
 						if (server.isListening()) {
 							display("Cannot set port when server is not closed.");

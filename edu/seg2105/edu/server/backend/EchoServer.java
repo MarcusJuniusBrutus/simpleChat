@@ -68,22 +68,16 @@ public class EchoServer extends AbstractServer
 	  if ( (client.getInfo("loginID") == null) && (message_split_up[0].equals("#login")) ) {
 		String loginID = message_split_up[1];
 		client.setInfo("loginID", loginID);
+		serverUI.display("Message received: " + message + " from <" 
+				  + client.getInfo("loginID") + ">");
+		
+		serverUI.display(client.getInfo("loginID") + " has logged on.");
+		this.sendToAllClients(client.getInfo("loginID") + " has logged on.");
 	  } else {
 		  //client.getInfo("loginID") != null || message_split_up[0] != "#login"
-		  
-		  if (message_split_up[0].equals("#login")) {
-			  //client.getInfo("loginID") != null && message_split_up[0] == "#login"
-			  //a loginID is already in the system (so the first command has already been received),
-			  //but now you are again trying to use the #login command
-			  try {
-				client.sendToClient("You cannot use the command #login since it has already been used before.");
-				client.close();
-			  } catch (IOException e) {}
-		  } else { //message_split_up != "#login"
-			  System.out.println("Message received: " + message + " from Client <" 
+		  serverUI.display("Message received: " + message + " from <" 
 				  + client.getInfo("loginID") + ">");
-			  this.sendToAllClients("<" + client.getInfo("loginID") + "> " + message);
-		  }
+		  this.sendToAllClients("<" + client.getInfo("loginID") + "> " + message);
 	  }
   }
     
@@ -93,8 +87,7 @@ public class EchoServer extends AbstractServer
    */
   protected void serverStarted()
   {
-    System.out.println
-      ("Server listening for connections on port " + getPort());
+    serverUI.display("Server listening for connections on port " + getPort());
   }
   
   /**
@@ -103,8 +96,7 @@ public class EchoServer extends AbstractServer
    */
   protected void serverStopped()
   {
-    System.out.println
-      ("Server has stopped listening for connections.");
+	serverUI.display ("Server has stopped listening for connections.");
   }
   
   /**
@@ -114,8 +106,7 @@ public class EchoServer extends AbstractServer
 	 */
   @Override
   protected void clientConnected(ConnectionToClient client) {
-	  System.out.println("Client " + 
-			  client.getInetAddress().toString() + " connected. Welcome, we are happy to have you!");
+	  serverUI.display("A new client has connected to the server.");
   }
 
 	/**
@@ -126,7 +117,7 @@ public class EchoServer extends AbstractServer
   @Override
   synchronized protected void clientDisconnected(
 		  ConnectionToClient client) {
-	  System.out.println("A client has disconnected. We will miss them!");
+	  serverUI.display("A client has disconnected. We will miss them!");
 	}
   
   /**
@@ -138,7 +129,7 @@ public class EchoServer extends AbstractServer
   @Override
   synchronized protected void clientException(
 			ConnectionToClient client, Throwable exception) {
-	  System.out.println("A client has disconnected. We will miss them!");
+	  serverUI.display("A client has disconnected. We will miss them!");
   }
 }
 //End of EchoServer class

@@ -100,17 +100,6 @@ public class EchoServer extends AbstractServer
   }
   
   /**
-     * Implemented for Exercise 1, Server Side c)
-	 * A method to announce when a client connects.
-	 * @param client the connection connected to the client.
-	 */
-  @Override
-  protected void clientConnected(ConnectionToClient client) {
-	  serverUI.display("<" + client.getInfo("loginID") 
-	  		+ "> has connected.");
-  }
-
-	/**
 	 * Implemented for Exercise 1, Server Side c)
 	 * A method to announce when a client disconnects.
 	 * @param client the connection with the client.
@@ -131,7 +120,8 @@ public class EchoServer extends AbstractServer
   @Override
   synchronized protected void clientException(
 			ConnectionToClient client, Throwable exception) {
-	  serverUI.display("A client has disconnected. We will miss them!");
+	  serverUI.display("<" + client.getInfo("loginID") 
+		+ "> has disconnected.");
   }
 }
 //End of EchoServer class

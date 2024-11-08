@@ -111,7 +111,6 @@ public class ServerConsole implements ChatIF {
 							display("Server is already running.");
 						} else { //!server.isListening()
 							server.listen();
-							display("Server is now listening for new clients.");
 						}
 					} else if (message.equals("#getport")) {
 						  display("Current port number: " + server.getPort());

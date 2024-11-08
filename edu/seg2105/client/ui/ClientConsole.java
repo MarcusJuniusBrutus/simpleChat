@@ -55,14 +55,11 @@ public class ClientConsole implements ChatIF
     try 
     {
       client= new ChatClient(loginID, host, port, this);
-      
-      
     } 
     catch(IOException exception) 
     {
-      System.out.println("Error: Can't setup connection!"
-                + " Terminating client.");
-      System.exit(1);
+    	System.out.println("Error: Can't setup connection! Terminating client.");
+    	System.exit(1);
     }
     
     // Create scanner object to read from console
@@ -185,22 +182,14 @@ public class ClientConsole implements ChatIF
 		  System.exit(1);
 	  }
 	  
-	  String host = "";
+	  String host = "localhost";
+	  int port = DEFAULT_PORT;
 	  
 	  try {
 		  host = args[1];
-	  } catch (ArrayIndexOutOfBoundsException ex) {
-		  host = "localhost";
-	  }
-	  
-	  int port = 0;
-	  
-	  try {
 		  port = Integer.parseInt(args[2]);
 	  } catch (ArrayIndexOutOfBoundsException ex) {
-		  port = DEFAULT_PORT;
-	  } catch (NumberFormatException ex) {
-		  System.out.println("Given port number was not an integer.");
+		  host = "localhost";
 		  port = DEFAULT_PORT;
 	  }
 	  
